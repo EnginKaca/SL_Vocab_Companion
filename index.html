@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Vocabulary Learning</title>
+    <style>
+        /* Modern, clean styling */
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Table styling */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 20px 0;
+            background: white;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+        
+        /* Interactive elements */
+        .flag-icon {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+            margin: 0 5px;
+            transition: transform 0.2s;
+        }
+
+        .flag-icon:hover {
+            transform: scale(1.1);
+        }
+        
+        .external-link {
+            color: #0066cc;
+            text-decoration: none;
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .external-link:hover {
+            background-color: #f0f0f0;
+        }
+
+        /* Search feature */
+        .search-container {
+            margin-bottom: 20px;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        /* Audio player status */
+        .audio-status {
+            display: none;
+            color: #28a745;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Vocabulary Learning Table</h1>
+        
+        <div class="search-container">
+            <input type="text" id="searchInput" placeholder="Search for words...">
+        </div>
+
+        <table id="vocabularyTable">
+            <thead>
+                <tr>
+                    <th>No.</th>
+                    <th>TLP Word</th>
+                    <th>Definition</th>
+                    <th>Word Forms</th>
+                    <th>Pronunciation</th>
+                    <th>Examples</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>competent</td>
+                    <td>having enough skill or knowledge to do something to a satisfactory standard</td>
+                    <td>
+                        competence (n)<br>
+                        competent (adj)<br>
+                        competently (adv)
+                    </td>
+                    <td>
+                        <img src="/api/placeholder/24/24" alt="US Flag" class="flag-icon" onclick="playAudio('competent-us.mp3', this)">
+                        <img src="/api/placeholder/24/24" alt="UK Flag" class="flag-icon" onclick="playAudio('competent-uk.mp3', this)">
+                        <span class="audio-status">▶️ Playing...</span>
+                    </td>
+                    <td>
+                        <a href="examples.html" class="external-link" target="_blank">View Examples</a>
+                    </td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Audio playback functionality
+        function playAudio(audioFile, element) {
+            const audio = new Audio('audio/' + audioFile);
+            const statusElement = element.parentElement.querySelector('.audio-status');
+            
+            audio.onplay = function() {
+                statusElement.style.display = 'inline';
+            };
+            
+            audio.onended = function() {
+                statusElement.style.display = 'none';
+            };
+            
+            audio.play().catch(function(error) {
+                console.log("Audio playback failed:", error);
+                alert("Audio playback failed. Please check if the audio file exists.");
+            });
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function(e) {
+            const searchText = e.target.value.toLowerCase();
+            const rows = document.querySelectorAll('#vocabularyTable tbody tr');
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(searchText) ? '' : 'none';
+            });
+        });
+
+        // Make external links open in new tab
+        document.querySelectorAll('.external-link').forEach(link => {
+            link.setAttribute('target', '_blank');
+            link.setAttribute('rel', 'noopener noreferrer');
+        });
+    </script>
+</body>
+</html>
